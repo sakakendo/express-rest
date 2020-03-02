@@ -1,7 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const app = express();
+const next = require('next');
+//const app = express();
 const port = parseInt(process.env.PORT) || 3000
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({dev});
+const handle= app.getRequestHandler();
 
 const mongo_uri = process.env.MONGODB_URI
 if(!mongo_uri) throw 'mongodb uri is undefined';
@@ -34,7 +38,16 @@ var api = function(router){
   return router;
 }(router);
 
-app.use('/api', api);
+app.prepare().then(function(){
+  const server = express();
 
-app.listen(port, ()=>console.log(`start app at ${port}`));
+  server.use('/api', api);
+
+  server.all('*', (req, res)=>{
+    return handle(req, res);
+  })
+  server.listen(port, ()=>console.log(`start app at ${port}`));
+
+
+});
 
