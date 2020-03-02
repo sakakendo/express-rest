@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const port = 3000
+const port = parseInt(process.env.PORT) || 3000
 
 /*
 const mongo_uri = 'mongodb://localhost/express-rest' 
