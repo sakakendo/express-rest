@@ -7,6 +7,7 @@ const app = next({dev});
 const handle= app.getRequestHandler();
 
 require('./app/models/user');
+require('./app/models/task');
 
 const mongo_uri = process.env.MONGODB_URI
 if(!mongo_uri) throw 'mongodb uri is undefined';

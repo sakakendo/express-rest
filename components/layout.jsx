@@ -8,7 +8,6 @@ export default function({children}){
         token: null
     })
     const setToken = function(token){
-//        if(!process.browser) return null;
         localStorage.setItem('token', token);
         setUser({...user, token})
     }
