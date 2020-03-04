@@ -47,9 +47,9 @@ export default function ({ children }) {
           </nav>
         </>
         {children}
-        {
+        {/*
           user.token ? 'loged in' : 'not loged in'
-        }
+        */}
       </RootContext.Provider>
     </>
   )

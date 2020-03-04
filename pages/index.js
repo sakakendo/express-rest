@@ -27,7 +27,7 @@ function createTask(token, task, cb, fb){
   }).then(res=>{
     cb(res.data.resource);
   }).catch(err=>{
-    fb(err.data.error)
+    fb(err)
   });
 }
 
@@ -41,7 +41,7 @@ function updateTask(token, task, cb, fb){
   }).then(res=>{
     cb(res.data.resource);
   }).catch(err=>{
-    fb(err.data.error)
+    fb(err)
   });
 }
 
@@ -143,7 +143,7 @@ function Todo() {
 
 function Dashboard() {
   return (
-    <div>
+    <div className="dashboard">
       <Todo />
     </div>
   )
