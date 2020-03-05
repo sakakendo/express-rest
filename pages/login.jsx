@@ -1,18 +1,13 @@
 import React, {useState, useContext} from 'react';
+import Router from 'next/router';
 import axios from 'axios';
 import Layout from '../components/layout'
 import {RootContext} from '../components/Context';
 
-function register(credential, cb, fb){
-    console.log(credential);
-    axios.post('/api/user/authenticate',{
-        ...credential
-    }).then((res)=>{
-        cb(res.data.token);
-    }).catch(err=>{
-        console.error(err);
-        fb();
-    })
+function login(credential, cb, fb){
+    axios.post('/api/user/authenticate',credential)
+        .then((res)=>cb(res.data.token))
+        .catch(err=>fb(err.response.data.error))
 }
 
 function LoginForm(){
@@ -24,8 +19,10 @@ function LoginForm(){
     const {setToken} = useContext(RootContext);
     return(
         <>
-            Login
-            {error}
+            <h1>Login</h1>
+            <span>
+                {error}
+            </span>
             <form>
                 <input 
                     type="email" 
@@ -36,7 +33,10 @@ function LoginForm(){
                     onChange={(e)=>setCredential({...credential, password: e.target.value,})}
                     value={credential.password}></input>
                 <button type="button" onClick={(e)=>{
-                    register(credential, setToken, (mes)=>setError(mes));
+                    login(credential, (token)=>{
+                        setToken(token)
+                        Router.push('/')
+                    }, (mes)=>setError(mes));
                     e.preventDefault();
                 }}> login</button> 
             </form>

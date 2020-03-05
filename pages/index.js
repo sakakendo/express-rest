@@ -24,15 +24,12 @@ function createTask(token, task, cb, fb){
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-  }).then(res=>{
-    cb(res.data.resource);
-  }).catch(err=>{
-    fb(err)
-  });
+  })
+    .then(res => cb(res.data.resource))
+    .catch(err => fb(err));
 }
 
 function updateTask(token, task, cb, fb){
-  console.log(task);
   axios.put(`/api/task/${task._id}`, task, {
     headers: {
       'Content-Type': 'application/json',
@@ -49,19 +46,18 @@ function TodoItem({ item, mode, updateItem }) {
   const { title, note, completed } = item;
   const {user} = useContext(RootContext);
   const {token} = user;
-  if ((mode === 1 && item.completed) || (mode === 2 && !item.completed)) return null;
+  if ((mode === 1 && completed) || (mode === 2 && !completed)) return null;
   return (
-    <div>
-      <button
-        onClick={() =>{
-          const _item = {
-            ...item,
-            completed: !completed
-          };
-          updateTask(token, _item, (res)=>updateItem(res), console.error);
-        }}>{
-          completed ? 'x' : 'o'
-        }</button>
+    <div className="item">
+      <label className="container">
+        <input 
+          type="checkbox"
+          checked={completed? 'checked': ''} 
+          onChange={()=>{
+          updateTask(token, {...item, completed: !completed}, 
+            (res) => updateItem(res), console.error);
+        }}></input>
+        <span className="checkmark"/>
       <input
         type="text"
         value={title}
@@ -71,6 +67,7 @@ function TodoItem({ item, mode, updateItem }) {
         onChange={(e) => {
           updateItem({ ...item, title: e.target.value })
         }}></input>
+      </label>
     </div>
   )
 }
@@ -87,9 +84,15 @@ function TodoList({ items, setItems }) {
             setItems(_items)
           }} />)
       }
-      <button onClick={() => setMode(0)}>all</button>
-      <button onClick={() => setMode(1)}>active</button>
-      <button onClick={() => setMode(2)}>completed</button>
+      <button  
+        className={`${mode === 0? 'active': ''}`} 
+        onClick={() => setMode(0)}>all</button>
+      <button 
+        className={`${mode === 1? 'active': ''}`} 
+        onClick={() => setMode(1)}>active</button>
+      <button 
+        className={`${mode === 2? 'active': ''}`} 
+        onClick={() => setMode(2)}>completed</button>
     </>
   )
 }
@@ -137,7 +140,6 @@ function Todo() {
     <TodoList
       items={items}
       setItems={setItems} />
-
   </>)
 }
 

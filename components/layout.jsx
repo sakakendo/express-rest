@@ -37,19 +37,16 @@ export default function ({ children }) {
               <li><Link href="/"><a>home</a></Link></li>
               {
                 user.token
-                  ? <li><a className="logout" onClick={logout}>logout</a></li>
-                  : <>
-                    <li><Link href="/login"><a>login</a></Link></li>
-                    <li><Link href="/register"><a>register</a></Link></li>
-                  </>
+                  ? <li className="end"><a className="logout" onClick={logout}>logout</a></li>
+                  : <div className="end">
+                    <li className=""><Link href="/login"><a>login</a></Link></li>
+                    <li className=""><Link href="/register"><a>register</a></Link></li>
+                  </div>
               }
             </ul>
           </nav>
         </>
         {children}
-        {/*
-          user.token ? 'loged in' : 'not loged in'
-        */}
       </RootContext.Provider>
     </>
   )
